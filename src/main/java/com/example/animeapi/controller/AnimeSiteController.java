@@ -5,8 +5,10 @@ import com.example.animeapi.service.AnimeSiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/anime-sites")
@@ -41,8 +43,14 @@ public class AnimeSiteController {
     }
     
     @PostMapping
-    public AnimeSite createAnimeSite(@RequestBody AnimeSite animeSite) {
-        return animeSiteService.saveAnimeSite(animeSite);
+    public ResponseEntity<AnimeSite> createAnimeSite(@RequestBody AnimeSite animeSite) {
+        AnimeSite savedAnimeSite = animeSiteService.saveAnimeSite(animeSite);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedAnimeSite.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(savedAnimeSite);
     }
     
     @PutMapping("/{id}")

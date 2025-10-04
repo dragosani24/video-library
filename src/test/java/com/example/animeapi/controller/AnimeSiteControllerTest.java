@@ -82,7 +82,7 @@ public class AnimeSiteControllerTest {
         mockMvc.perform(post("/api/anime-sites")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(animeSite)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Test Name"));
     }
 
